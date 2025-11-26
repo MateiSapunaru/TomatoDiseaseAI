@@ -1,5 +1,3 @@
-# src/api_main.py
-
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse
 from PIL import Image
@@ -7,7 +5,6 @@ import io
 
 from src.model_utils import load_trained_model, predict_pil_image
 
-# Load model once at startup
 model, idx_to_class = load_trained_model()
 
 app = FastAPI(
@@ -94,7 +91,6 @@ async def predict(file: UploadFile = File(...)):
 
         predicted_class, confidence = predict_pil_image(model, image, idx_to_class)
 
-        # Simple HTML result page
         result_html = f"""
         <!DOCTYPE html>
         <html>

@@ -1,5 +1,3 @@
-# src/model_utils.py
-
 import json
 from typing import Dict, Tuple
 
@@ -14,7 +12,6 @@ from torchvision import datasets, transforms, models
 from src import config
 
 
-# ----------------- TRANSFORMS ----------------- #
 
 def get_transforms(train: bool = True):
     """
@@ -42,7 +39,6 @@ def get_transforms(train: bool = True):
         ])
 
 
-# ----------------- DATALOADERS ----------------- #
 
 def create_dataloaders() -> Tuple[Dict, Dict]:
     """
@@ -74,7 +70,6 @@ def create_dataloaders() -> Tuple[Dict, Dict]:
     return image_datasets, dataloaders
 
 
-# ----------------- MODEL ----------------- #
 
 def create_model(num_classes: int) -> nn.Module:
     """
@@ -93,7 +88,6 @@ def create_model(num_classes: int) -> nn.Module:
     return model
 
 
-# ----------------- SAVE / LOAD ----------------- #
 
 def save_model(model: nn.Module, path=config.MODEL_PATH):
     torch.save(model.state_dict(), path)
@@ -129,7 +123,6 @@ def load_trained_model(path=config.MODEL_PATH) -> Tuple[nn.Module, Dict[int, str
     return model, idx_to_class
 
 
-# ----------------- PREDICTION ----------------- #
 
 @torch.no_grad()
 def predict_pil_image(model, image: Image.Image, idx_to_class):

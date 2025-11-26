@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-ROOT = Path("dataset")  # from project root
+ROOT = Path("dataset")
 
 def check_folder(folder: Path):
     for img_path in folder.rglob("*.jpg"):
@@ -10,7 +10,6 @@ def check_folder(folder: Path):
                 img.verify()
         except Exception as e:
             print(f"BAD IMAGE: {img_path}  --  {e}")
-            # img_path.unlink()   # uncomment to delete automatically (dangerous!)
 
 if __name__ == "__main__":
     check_folder(ROOT)

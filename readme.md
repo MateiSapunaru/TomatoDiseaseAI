@@ -81,5 +81,3 @@ http://127.0.0.1:8000
 Upload an image → get the predicted disease.
 
 ---
-
-If you need a more formal or shorter version for a CV, I can generate that too.
