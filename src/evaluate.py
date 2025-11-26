@@ -1,5 +1,3 @@
-# src/evaluate_metrics.py
-
 import json
 from pathlib import Path
 
@@ -20,13 +18,11 @@ from src.config import DEVICE, PROJECT_ROOT
 from src.model_utils import create_dataloaders, load_trained_model
 
 
-# ------------ OUTPUT DIRECTORY ------------ #
 
 METRICS_DIR = PROJECT_ROOT / "artifacts" / "metrics"
 METRICS_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# ------------ COLLECT PREDICTIONS ------------ #
 
 def collect_predictions(split: str = "val"):
     """
@@ -68,7 +64,6 @@ def collect_predictions(split: str = "val"):
     )
 
 
-# ------------ PLOTTING HELPERS ------------ #
 
 def save_confusion_matrix(cm, class_names, filename="confusion_matrix.png"):
     """
@@ -124,7 +119,6 @@ def save_precision_recall_plots(precision, recall, class_names):
     """
     x = np.arange(len(class_names))
 
-    # Precision
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.bar(x, precision)
     ax.set_xticks(x)
@@ -137,7 +131,6 @@ def save_precision_recall_plots(precision, recall, class_names):
     plt.close()
     print(f"[SAVED] {path_p}")
 
-    # Recall
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.bar(x, recall)
     ax.set_xticks(x)
@@ -157,7 +150,6 @@ def save_roc_curves(y_true, y_proba, class_names):
     """
     n_classes = len(class_names)
 
-    # One-hot encode y_true
     y_true_onehot = np.zeros((y_true.shape[0], n_classes))
     y_true_onehot[np.arange(y_true.shape[0]), y_true] = 1
 
@@ -201,7 +193,6 @@ def save_training_curves():
     train_acc = history["train_acc"]
     val_acc = history["val_acc"]
 
-    # Loss curves
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.plot(epochs, train_loss, label="Train Loss")
     ax.plot(epochs, val_loss, label="Val Loss")
@@ -215,7 +206,6 @@ def save_training_curves():
     plt.close()
     print(f"[SAVED] {path_loss}")
 
-    # Accuracy curves
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.plot(epochs, train_acc, label="Train Acc")
     ax.plot(epochs, val_acc, label="Val Acc")
@@ -230,17 +220,14 @@ def save_training_curves():
     print(f"[SAVED] {path_acc}")
 
 
-# ------------ MAIN ------------ #
 
 def main():
     y_true, y_pred, y_proba, class_names = collect_predictions(split="val")
 
-    # --- basic metrics ---
     acc = accuracy_score(y_true, y_pred)
     macro_f1 = f1_score(y_true, y_pred, average="macro")
     weighted_f1 = f1_score(y_true, y_pred, average="weighted")
 
-    # --- classification report ---
     clf_report = classification_report(
         y_true, y_pred, target_names=class_names, digits=4
     )
@@ -255,21 +242,17 @@ def main():
         f.write(f"Weighted F1 score: {weighted_f1:.4f}\n")
     print(f"[SAVED] {METRICS_DIR / 'metrics_summary.txt'}")
 
-    # --- confusion matrix ---
     cm = confusion_matrix(y_true, y_pred)
     save_confusion_matrix(cm, class_names)
 
-    # --- per-class F1 ---
     precision, recall, f1_per_class, _ = precision_recall_fscore_support(
         y_true, y_pred, labels=np.arange(len(class_names))
     )
     save_f1_plot(f1_per_class, class_names)
     save_precision_recall_plots(precision, recall, class_names)
 
-    # --- ROC curves ---
     save_roc_curves(y_true, y_proba, class_names)
 
-    # --- training curves (loss/acc vs epoch) ---
     save_training_curves()
 
 
