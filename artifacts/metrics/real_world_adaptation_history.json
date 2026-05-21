@@ -1,0 +1,74 @@
+[
+    {
+        "epoch": 1,
+        "train_loss": 2.896326131361691,
+        "train_acc": 0.5686274509803921,
+        "train_macro_f1": 0.6367968190247364,
+        "real_world_test_loss": 3.210992794124375,
+        "real_world_test_acc": 0.5852156057494866,
+        "real_world_test_macro_f1": 0.6619963020321797
+    },
+    {
+        "epoch": 2,
+        "train_loss": 2.720173738857004,
+        "train_acc": 0.5802139037433155,
+        "train_macro_f1": 0.649805530603403,
+        "real_world_test_loss": 3.260597082363629,
+        "real_world_test_acc": 0.5893223819301848,
+        "real_world_test_macro_f1": 0.6682524282008028
+    },
+    {
+        "epoch": 3,
+        "train_loss": 2.8853858430967825,
+        "train_acc": 0.5659536541889483,
+        "train_macro_f1": 0.6383272159512996,
+        "real_world_test_loss": 3.2621770389760543,
+        "real_world_test_acc": 0.5831622176591376,
+        "real_world_test_macro_f1": 0.6560206152082592
+    },
+    {
+        "epoch": 4,
+        "train_loss": 2.735620782549581,
+        "train_acc": 0.5730837789661319,
+        "train_macro_f1": 0.6481928474683682,
+        "real_world_test_loss": 3.0381284511554414,
+        "real_world_test_acc": 0.5913757700205339,
+        "real_world_test_macro_f1": 0.6698978975316104
+    },
+    {
+        "epoch": 5,
+        "train_loss": 2.840181453555238,
+        "train_acc": 0.5525846702317291,
+        "train_macro_f1": 0.629314737430364,
+        "real_world_test_loss": 3.086696191245281,
+        "real_world_test_acc": 0.5954825462012321,
+        "real_world_test_macro_f1": 0.6672665461059432
+    },
+    {
+        "epoch": 6,
+        "train_loss": 2.669644731463808,
+        "train_acc": 0.5873440285204992,
+        "train_macro_f1": 0.6595105699209294,
+        "real_world_test_loss": 3.2564446176048483,
+        "real_world_test_acc": 0.5872689938398358,
+        "real_world_test_macro_f1": 0.6651119141501279
+    },
+    {
+        "epoch": 7,
+        "train_loss": 2.715327326520454,
+        "train_acc": 0.5784313725490197,
+        "train_macro_f1": 0.6526511962699121,
+        "real_world_test_loss": 3.2078060802852533,
+        "real_world_test_acc": 0.5975359342915811,
+        "real_world_test_macro_f1": 0.6756889494036559
+    },
+    {
+        "epoch": 8,
+        "train_loss": 2.76184980839544,
+        "train_acc": 0.5900178253119429,
+        "train_macro_f1": 0.6570374708936495,
+        "real_world_test_loss": 3.1184434805073042,
+        "real_world_test_acc": 0.6016427104722792,
+        "real_world_test_macro_f1": 0.6751418021173637
+    }
+]

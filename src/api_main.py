@@ -1,151 +1,157 @@
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from PIL import Image
 import io
+import torch
 
-from src.model_utils import load_trained_model, predict_pil_image
-
-model, idx_to_class = load_trained_model()
-
-app = FastAPI(
-    title="Tomato Leaf Disease Demo",
-    description="Upload an image of a tomato leaf and get a disease prediction.",
-    version="0.1.0",
+from src import config
+from src.model_utils import (
+    load_trained_model,
+    get_transforms,
+)
+from src.gradcam_utils import (
+    GradCAM,
+    create_gradcam_overlay,
+    pil_to_base64,
 )
 
 
-@app.get("/", response_class=HTMLResponse)
-async def home():
-    """
-    Simple HTML upload form.
-    """
-    html_content = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Tomato Leaf Disease Classifier</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 600px;
-                margin: 40px auto;
-                text-align: center;
-            }
-            .container {
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 20px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            }
-            input[type="file"] {
-                margin: 20px 0;
-            }
-            button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                background-color: #2e7d32;
-                color: white;
-                font-size: 16px;
-                cursor: pointer;
-            }
-            button:hover {
-                background-color: #1b5e20;
-            }
-            .result {
-                margin-top: 20px;
-                font-size: 18px;
-                font-weight: bold;
-            }
-            .prob {
-                font-size: 14px;
-                color: #555;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Tomato Leaf Disease Classifier</h1>
-            <p>Upload an image of a tomato leaf and the model will predict the disease.</p>
-            <form action="/predict" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept="image/*" required />
-                <br/>
-                <button type="submit">Predict</button>
-            </form>
-        </div>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=html_content)
+MODEL_TYPE = "adapted"
+
+if MODEL_TYPE == "adapted" and config.ADAPTATION_MODEL_PATH.exists():
+    model, idx_to_class = load_trained_model(config.ADAPTATION_MODEL_PATH)
+else:
+    model, idx_to_class = load_trained_model(config.MODEL_PATH)
+
+class_names = [
+    idx_to_class[i]
+    for i in range(len(idx_to_class))
+]
+
+app = FastAPI(
+    title="Tomato Leaf Disease AI",
+    description="FastAPI backend for tomato leaf disease inference and Grad-CAM explainability.",
+    version="1.0.0",
+)
 
 
-@app.post("/predict", response_class=HTMLResponse)
+def read_image_from_upload(file_bytes):
+    image = Image.open(io.BytesIO(file_bytes))
+    image = image.convert("RGB")
+    return image
+
+
+def predict_image(image: Image.Image, top_k: int = 3):
+    transform = get_transforms(train=False)
+
+    tensor = transform(image)
+    tensor = tensor.unsqueeze(0)
+    tensor = tensor.to(config.DEVICE)
+
+    with torch.no_grad():
+        outputs = model(tensor)
+        probabilities = torch.softmax(outputs, dim=1)[0]
+
+    top_probs, top_indices = torch.topk(probabilities, k=top_k)
+
+    predictions = []
+
+    for probability, index in zip(top_probs, top_indices):
+        class_index = index.item()
+
+        predictions.append({
+            "class_name": idx_to_class[class_index],
+            "confidence": float(probability.item()),
+        })
+
+    return predictions
+
+
+def generate_gradcam(image: Image.Image, class_index: int):
+    transform = get_transforms(train=False)
+
+    tensor = transform(image)
+    tensor = tensor.unsqueeze(0)
+    tensor = tensor.to(config.DEVICE)
+
+    gradcam = GradCAM(
+        model=model,
+        target_layer=model.layer4[-1].conv2,
+    )
+
+    cam = gradcam.generate(
+        input_tensor=tensor,
+        class_index=class_index,
+    )
+
+    gradcam.close()
+
+    overlay = create_gradcam_overlay(image, cam)
+    return overlay
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok",
+        "device": str(config.DEVICE),
+        "model_type": MODEL_TYPE,
+        "classes": class_names,
+    }
+
+
+@app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    """
-    Receive an uploaded image, run it through the model,
-    and return an HTML page with the prediction.
-    """
     try:
-        image_bytes = await file.read()
-        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        file_bytes = await file.read()
+        image = read_image_from_upload(file_bytes)
 
-        predicted_class, confidence = predict_pil_image(model, image, idx_to_class)
+        predictions = predict_image(image, top_k=3)
 
-        result_html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Prediction Result</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    max-width: 600px;
-                    margin: 40px auto;
-                    text-align: center;
-                }}
-                .container {{
-                    border: 1px solid #ddd;
-                    border-radius: 10px;
-                    padding: 20px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                }}
-                .result {{
-                    margin-top: 20px;
-                    font-size: 20px;
-                    font-weight: bold;
-                }}
-                .prob {{
-                    font-size: 14px;
-                    color: #555;
-                }}
-                a {{
-                    display: inline-block;
-                    margin-top: 20px;
-                    text-decoration: none;
-                    color: #1976d2;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Prediction Result</h1>
-                <p class="result">Predicted class: {predicted_class}</p>
-                <p class="prob">Confidence: {confidence:.4f}</p>
-                <a href="/">&#8592; Try another image</a>
-            </div>
-        </body>
-        </html>
-        """
-        return HTMLResponse(content=result_html)
+        return {
+            "predicted_class": predictions[0]["class_name"],
+            "confidence": predictions[0]["confidence"],
+            "top_3_predictions": predictions,
+        }
 
-    except Exception as e:
-        error_html = f"""
-        <html>
-        <body>
-            <h1>Error</h1>
-            <p>Could not process the image: {str(e)}</p>
-            <a href="/">&#8592; Back</a>
-        </body>
-        </html>
-        """
-        return HTMLResponse(content=error_html, status_code=400)
+    except Exception as error:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "error": str(error),
+            },
+        )
+
+
+@app.post("/predict-gradcam")
+async def predict_gradcam(file: UploadFile = File(...)):
+    try:
+        file_bytes = await file.read()
+        image = read_image_from_upload(file_bytes)
+
+        predictions = predict_image(image, top_k=3)
+        predicted_class = predictions[0]["class_name"]
+
+        class_index = class_names.index(predicted_class)
+
+        overlay = generate_gradcam(
+            image=image,
+            class_index=class_index,
+        )
+
+        encoded_overlay = pil_to_base64(overlay)
+
+        return {
+            "predicted_class": predicted_class,
+            "confidence": predictions[0]["confidence"],
+            "top_3_predictions": predictions,
+            "gradcam_image_base64": encoded_overlay,
+        }
+
+    except Exception as error:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "error": str(error),
+            },
+        )
