@@ -234,10 +234,9 @@ The application allows users to:
 - visualize Grad-CAM
 - inspect prediction confidence
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 1 HERE — Main Streamlit Application]
+```<img width="1600" height="802" alt="image" src="https://github.com/user-attachments/assets/f70d6fe7-4241-4ff6-bef7-bf75baa4589a" />
+
 ```
 
 ---
@@ -250,10 +249,9 @@ The prediction interface displays:
 - confidence score
 - top-3 predictions
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 2 HERE — Prediction Result]
+```<img width="1600" height="798" alt="image" src="https://github.com/user-attachments/assets/af7ef170-6f02-4ac1-9478-bfb0fbbc3280" />
+
 ```
 
 ---
@@ -262,25 +260,12 @@ The prediction interface displays:
 
 Grad-CAM highlights the image regions used by the model.
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 3 HERE — Grad-CAM Visualization]
+```<img width="973" height="1040" alt="image" src="https://github.com/user-attachments/assets/7eaebb49-d1af-4edc-b6b6-21e439efc717" />
+
 ```
 
----
 
-## Webcam Inference
-
-Real-time inference using webcam input.
-
-### Screenshot Placeholder
-
-```text
-[SCREENSHOT 4 HERE — Webcam Inference]
-```
-
----
 
 # Evaluation Results
 
@@ -290,10 +275,9 @@ Real-time inference using webcam input.
 
 The Streamlit dashboard includes visualization of model performance.
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 5 HERE — Evaluation Dashboard]
+```<img width="1600" height="778" alt="image" src="https://github.com/user-attachments/assets/affcc14d-8953-4d68-8ee8-5c9f08b7418f" />
+
 ```
 
 ---
@@ -302,10 +286,9 @@ The Streamlit dashboard includes visualization of model performance.
 
 Visual representation of classification performance.
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 6 HERE — Confusion Matrix]
+```<img width="1108" height="980" alt="image" src="https://github.com/user-attachments/assets/67dab765-fdff-46db-9c22-2ba1c7fe9a2f" />
+
 ```
 
 ---
@@ -314,10 +297,9 @@ Visual representation of classification performance.
 
 One-vs-rest ROC curves for each disease category.
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 7 HERE — ROC Curves]
+```<img width="762" height="724" alt="image" src="https://github.com/user-attachments/assets/b4854e16-0484-4ba9-807e-ceeebbb2d4a6" />
+
 ```
 
 ---
@@ -332,10 +314,9 @@ Metrics include:
 - Precision
 - Recall
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 8 HERE — Per-Class Metrics]
+```<img width="751" height="487" alt="image" src="https://github.com/user-attachments/assets/d57287bc-baf6-4fd1-8ab3-4e730323959d" />
+
 ```
 
 ---
