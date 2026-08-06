@@ -363,13 +363,7 @@ TomatoDiseaseAI/
 └── .gitignore
 ```
 
-### Screenshot Placeholder
 
-```text
-[SCREENSHOT 9 HERE — Project Folder Structure]
-```
-
----
 
 # Installation
 
