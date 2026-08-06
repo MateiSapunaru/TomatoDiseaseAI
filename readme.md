@@ -235,7 +235,7 @@ The application allows users to:
 - inspect prediction confidence
 
 
-```<img width="1600" height="802" alt="image" src="https://github.com/user-attachments/assets/f70d6fe7-4241-4ff6-bef7-bf75baa4589a" />
+```image <img width="1600" height="802" alt="image" src="https://github.com/user-attachments/assets/f70d6fe7-4241-4ff6-bef7-bf75baa4589a" />
 
 ```
 
@@ -250,7 +250,7 @@ The prediction interface displays:
 - top-3 predictions
 
 
-```<img width="1600" height="798" alt="image" src="https://github.com/user-attachments/assets/af7ef170-6f02-4ac1-9478-bfb0fbbc3280" />
+```image <img width="1600" height="798" alt="image" src="https://github.com/user-attachments/assets/af7ef170-6f02-4ac1-9478-bfb0fbbc3280" />
 
 ```
 
@@ -261,7 +261,7 @@ The prediction interface displays:
 Grad-CAM highlights the image regions used by the model.
 
 
-```<img width="973" height="1040" alt="image" src="https://github.com/user-attachments/assets/7eaebb49-d1af-4edc-b6b6-21e439efc717" />
+```image <img width="973" height="1040" alt="image" src="https://github.com/user-attachments/assets/7eaebb49-d1af-4edc-b6b6-21e439efc717" />
 
 ```
 
@@ -276,7 +276,7 @@ Grad-CAM highlights the image regions used by the model.
 The Streamlit dashboard includes visualization of model performance.
 
 
-```<img width="1600" height="778" alt="image" src="https://github.com/user-attachments/assets/affcc14d-8953-4d68-8ee8-5c9f08b7418f" />
+```image <img width="1600" height="778" alt="image" src="https://github.com/user-attachments/assets/affcc14d-8953-4d68-8ee8-5c9f08b7418f" />
 
 ```
 
@@ -287,7 +287,7 @@ The Streamlit dashboard includes visualization of model performance.
 Visual representation of classification performance.
 
 
-```<img width="1108" height="980" alt="image" src="https://github.com/user-attachments/assets/67dab765-fdff-46db-9c22-2ba1c7fe9a2f" />
+```image <img width="1108" height="980" alt="image" src="https://github.com/user-attachments/assets/67dab765-fdff-46db-9c22-2ba1c7fe9a2f" />
 
 ```
 
@@ -298,7 +298,7 @@ Visual representation of classification performance.
 One-vs-rest ROC curves for each disease category.
 
 
-```<img width="762" height="724" alt="image" src="https://github.com/user-attachments/assets/b4854e16-0484-4ba9-807e-ceeebbb2d4a6" />
+```image <img width="762" height="724" alt="image" src="https://github.com/user-attachments/assets/b4854e16-0484-4ba9-807e-ceeebbb2d4a6" />
 
 ```
 
@@ -315,7 +315,7 @@ Metrics include:
 - Recall
 
 
-```<img width="751" height="487" alt="image" src="https://github.com/user-attachments/assets/d57287bc-baf6-4fd1-8ab3-4e730323959d" />
+```image <img width="751" height="487" alt="image" src="https://github.com/user-attachments/assets/d57287bc-baf6-4fd1-8ab3-4e730323959d" />
 
 ```
 
