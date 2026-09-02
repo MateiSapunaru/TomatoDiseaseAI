@@ -206,10 +206,11 @@ def load_trained_model(
 
 
 @torch.no_grad()
-def predict_pil_image(
+def predict_top_k(
     model,
     image: Image.Image,
     idx_to_class,
+    top_k: int = 1,
 ):
     transform = get_transforms(train=False)
 
@@ -218,22 +219,14 @@ def predict_pil_image(
     tensor = tensor.to(config.DEVICE)
 
     outputs = model(tensor)
+    probabilities = torch.softmax(outputs, dim=1)[0]
 
-    probabilities = torch.softmax(
-        outputs,
-        dim=1,
-    )
+    top_probs, top_indices = torch.topk(probabilities, k=top_k)
 
-    confidence, pred_idx = torch.max(
-        probabilities,
-        dim=1,
-    )
-
-    pred_idx = pred_idx.item()
-
-    class_name = idx_to_class[pred_idx]
-
-    return (
-        class_name,
-        float(confidence.item()),
-    )
+    return [
+        {
+            "class_name": idx_to_class[index.item()],
+            "confidence": float(probability.item()),
+        }
+        for probability, index in zip(top_probs, top_indices)
+    ]
