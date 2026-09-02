@@ -2,12 +2,12 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from PIL import Image
 import io
-import torch
 
 from src import config
 from src.model_utils import (
     load_trained_model,
     get_transforms,
+    predict_top_k,
 )
 from src.gradcam_utils import (
     GradCAM,
@@ -42,29 +42,7 @@ def read_image_from_upload(file_bytes):
 
 
 def predict_image(image: Image.Image, top_k: int = 3):
-    transform = get_transforms(train=False)
-
-    tensor = transform(image)
-    tensor = tensor.unsqueeze(0)
-    tensor = tensor.to(config.DEVICE)
-
-    with torch.no_grad():
-        outputs = model(tensor)
-        probabilities = torch.softmax(outputs, dim=1)[0]
-
-    top_probs, top_indices = torch.topk(probabilities, k=top_k)
-
-    predictions = []
-
-    for probability, index in zip(top_probs, top_indices):
-        class_index = index.item()
-
-        predictions.append({
-            "class_name": idx_to_class[class_index],
-            "confidence": float(probability.item()),
-        })
-
-    return predictions
+    return predict_top_k(model, image, idx_to_class, top_k=top_k)
 
 
 def generate_gradcam(image: Image.Image, class_index: int):

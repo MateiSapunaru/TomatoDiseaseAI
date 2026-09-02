@@ -370,10 +370,18 @@ TomatoDiseaseAI/
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/TomatoDiseaseAI.git
+git clone https://github.com/MateiSapunaru/TomatoDiseaseAI.git
 
 cd TomatoDiseaseAI
 ```
+
+---
+
+### Note on the dataset
+
+`dataset/` is not tracked in this repository (it's excluded via `.gitignore` since it contains 30k+ images). To train or evaluate from scratch, populate `dataset/train`, `dataset/valid`, `dataset/test`, `dataset/real_world_train`, and `dataset/real_world_test` with class-subfolder image data matching the classes in `artifacts/class_to_idx.json`.
+
+If you only want to run inference, this isn't needed — `artifacts/tomato_resnet18.pth` and `artifacts/tomato_resnet18_adapted.pth` are already included, so the FastAPI backend and Streamlit app work right after cloning.
 
 ---
 
